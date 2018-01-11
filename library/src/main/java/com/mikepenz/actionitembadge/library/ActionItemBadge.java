@@ -8,6 +8,7 @@ import android.view.Display;
 import android.view.Gravity;
 import android.view.MenuItem;
 import android.view.View;
+import android.view.Window;
 import android.widget.FrameLayout;
 import android.widget.ImageView;
 import android.widget.TextView;
@@ -24,20 +25,20 @@ import com.mikepenz.iconics.typeface.IIcon;
  */
 public class ActionItemBadge {
     public enum BadgeStyles {
-        GREY(new BadgeStyle(BadgeStyle.Style.DEFAULT, R.layout.menu_badge, Color.parseColor("#e0e0e0"), Color.parseColor("#c7c7c7"), Color.BLACK)),
-        DARK_GREY(new BadgeStyle(BadgeStyle.Style.DEFAULT, R.layout.menu_badge, Color.parseColor("#606060"), Color.parseColor("#3e3e3e"), Color.WHITE)),
-        RED(new BadgeStyle(BadgeStyle.Style.DEFAULT, R.layout.menu_badge, Color.parseColor("#FF4444"), Color.parseColor("#CC0000"), Color.WHITE)),
-        BLUE(new BadgeStyle(BadgeStyle.Style.DEFAULT, R.layout.menu_badge, Color.parseColor("#33B5E5"), Color.parseColor("#0099CC"), Color.WHITE)),
-        GREEN(new BadgeStyle(BadgeStyle.Style.DEFAULT, R.layout.menu_badge, Color.parseColor("#99CC00"), Color.parseColor("#669900"), Color.WHITE)),
-        PURPLE(new BadgeStyle(BadgeStyle.Style.DEFAULT, R.layout.menu_badge, Color.parseColor("#AA66CC"), Color.parseColor("#9933CC"), Color.WHITE)),
-        YELLOW(new BadgeStyle(BadgeStyle.Style.DEFAULT, R.layout.menu_badge, Color.parseColor("#FFBB33"), Color.parseColor("#FF8800"), Color.WHITE)),
-        GREY_LARGE(new BadgeStyle(BadgeStyle.Style.LARGE, R.layout.menu_badge_large, Color.parseColor("#e0e0e0"), Color.parseColor("#c7c7c7"), Color.BLACK)),
-        DARK_GREY_LARGE(new BadgeStyle(BadgeStyle.Style.LARGE, R.layout.menu_badge_large, Color.parseColor("#606060"), Color.parseColor("#3e3e3e"), Color.WHITE)),
-        RED_LARGE(new BadgeStyle(BadgeStyle.Style.LARGE, R.layout.menu_badge_large, Color.parseColor("#FF4444"), Color.parseColor("#CC0000"), Color.WHITE)),
-        BLUE_LARGE(new BadgeStyle(BadgeStyle.Style.LARGE, R.layout.menu_badge_large, Color.parseColor("#33B5E5"), Color.parseColor("#0099CC"), Color.WHITE)),
-        GREEN_LARGE(new BadgeStyle(BadgeStyle.Style.LARGE, R.layout.menu_badge_large, Color.parseColor("#99CC00"), Color.parseColor("#669900"), Color.WHITE)),
-        PURPLE_LARGE(new BadgeStyle(BadgeStyle.Style.LARGE, R.layout.menu_badge_large, Color.parseColor("#AA66CC"), Color.parseColor("#9933CC"), Color.WHITE)),
-        YELLOW_LARGE(new BadgeStyle(BadgeStyle.Style.LARGE, R.layout.menu_badge_large, Color.parseColor("#FFBB33"), Color.parseColor("#FF8800"), Color.WHITE)),;
+        GREY(new BadgeStyle(BadgeStyle.Style.DEFAULT, R.layout.menu_action_item_badge, Color.parseColor("#e0e0e0"), Color.parseColor("#c7c7c7"), Color.BLACK)),
+        DARK_GREY(new BadgeStyle(BadgeStyle.Style.DEFAULT, R.layout.menu_action_item_badge, Color.parseColor("#606060"), Color.parseColor("#3e3e3e"), Color.WHITE)),
+        RED(new BadgeStyle(BadgeStyle.Style.DEFAULT, R.layout.menu_action_item_badge, Color.parseColor("#FF4444"), Color.parseColor("#CC0000"), Color.WHITE)),
+        BLUE(new BadgeStyle(BadgeStyle.Style.DEFAULT, R.layout.menu_action_item_badge, Color.parseColor("#33B5E5"), Color.parseColor("#0099CC"), Color.WHITE)),
+        GREEN(new BadgeStyle(BadgeStyle.Style.DEFAULT, R.layout.menu_action_item_badge, Color.parseColor("#99CC00"), Color.parseColor("#669900"), Color.WHITE)),
+        PURPLE(new BadgeStyle(BadgeStyle.Style.DEFAULT, R.layout.menu_action_item_badge, Color.parseColor("#AA66CC"), Color.parseColor("#9933CC"), Color.WHITE)),
+        YELLOW(new BadgeStyle(BadgeStyle.Style.DEFAULT, R.layout.menu_action_item_badge, Color.parseColor("#FFBB33"), Color.parseColor("#FF8800"), Color.WHITE)),
+        GREY_LARGE(new BadgeStyle(BadgeStyle.Style.LARGE, R.layout.menu_action_item_badge_large, Color.parseColor("#e0e0e0"), Color.parseColor("#c7c7c7"), Color.BLACK)),
+        DARK_GREY_LARGE(new BadgeStyle(BadgeStyle.Style.LARGE, R.layout.menu_action_item_badge_large, Color.parseColor("#606060"), Color.parseColor("#3e3e3e"), Color.WHITE)),
+        RED_LARGE(new BadgeStyle(BadgeStyle.Style.LARGE, R.layout.menu_action_item_badge_large, Color.parseColor("#FF4444"), Color.parseColor("#CC0000"), Color.WHITE)),
+        BLUE_LARGE(new BadgeStyle(BadgeStyle.Style.LARGE, R.layout.menu_action_item_badge_large, Color.parseColor("#33B5E5"), Color.parseColor("#0099CC"), Color.WHITE)),
+        GREEN_LARGE(new BadgeStyle(BadgeStyle.Style.LARGE, R.layout.menu_action_item_badge_large, Color.parseColor("#99CC00"), Color.parseColor("#669900"), Color.WHITE)),
+        PURPLE_LARGE(new BadgeStyle(BadgeStyle.Style.LARGE, R.layout.menu_action_item_badge_large, Color.parseColor("#AA66CC"), Color.parseColor("#9933CC"), Color.WHITE)),
+        YELLOW_LARGE(new BadgeStyle(BadgeStyle.Style.LARGE, R.layout.menu_action_item_badge_large, Color.parseColor("#FFBB33"), Color.parseColor("#FF8800"), Color.WHITE)),;
 
         private BadgeStyle style;
 
@@ -132,12 +133,15 @@ public class ActionItemBadge {
 
     }
 
-
     public static void update(final Activity activity, final MenuItem menu, Drawable icon, BadgeStyle style, int badgeCount) {
+        update (activity, menu, icon, style, badgeCount, null);
+    }
+
+    public static void update(final Activity activity, final MenuItem menu, Drawable icon, BadgeStyle style, int badgeCount, ActionItemBadgeListener listener) {
         if (badgeCount == Integer.MIN_VALUE) {
-            update(activity, menu, icon, style, null);
+            update(activity, menu, icon, style, null, listener);
         } else {
-            update(activity, menu, icon, style, String.valueOf(badgeCount));
+            update(activity, menu, icon, style, String.valueOf(badgeCount), listener);
         }
     }
 
@@ -151,6 +155,20 @@ public class ActionItemBadge {
      * @param badgeCount
      */
     public static void update(final Activity activity, final MenuItem menu, Drawable icon, BadgeStyle style, String badgeCount) {
+        update(activity, menu, icon, style, badgeCount, null);
+    }
+
+    /**
+     * update the given menu item with icon, badgeCount and style
+     *
+     * @param activity   use to bind onOptionsItemSelected / and to display the toast
+     * @param menu
+     * @param icon
+     * @param style
+     * @param badgeCount
+     * @param listener
+     */
+    public static void update(final Activity activity, final MenuItem menu, Drawable icon, BadgeStyle style, String badgeCount, final ActionItemBadgeListener listener) {
         if (menu == null) return;
 
         FrameLayout badge;
@@ -176,7 +194,13 @@ public class ActionItemBadge {
             badge.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View v) {
-                    activity.onOptionsItemSelected(menu);
+                    boolean consumed = false;
+                    if (listener != null) {
+                        consumed = listener.onOptionsItemSelected(menu);
+                    }
+                    if (!consumed) {
+                        activity.onMenuItemSelected(Window.FEATURE_OPTIONS_PANEL, menu);
+                    }
                 }
             });
 
@@ -197,7 +221,7 @@ public class ActionItemBadge {
 
         //Apply style if it's set
         if (style != null) {
-            UIUtil.setBackground(badgeView, new BadgeDrawableBuilder().corners(style.getCorner()).color(style.getColor()).colorPressed(style.getColorPressed()).build(activity));
+            UIUtil.setBackground(badgeView, new BadgeDrawableBuilder().corners(style.getCorner()).color(style.getColor()).colorPressed(style.getColorPressed()).strokeColor(style.getStrokeColor()).stroke(style.getStroke()).build(activity));
             badgeView.setTextColor(style.getTextColor());
         }
 
@@ -206,7 +230,7 @@ public class ActionItemBadge {
             badgeView.setVisibility(View.GONE);
         } else {
             badgeView.setVisibility(View.VISIBLE);
-            badgeView.setText(String.valueOf(badgeCount));
+            badgeView.setText(badgeCount);
         }
 
         menu.setVisible(true);
@@ -220,5 +244,10 @@ public class ActionItemBadge {
      */
     public static void hide(MenuItem menu) {
         menu.setVisible(false);
+    }
+
+
+    public interface ActionItemBadgeListener {
+        boolean onOptionsItemSelected(MenuItem menu);
     }
 }

@@ -4,6 +4,7 @@ import android.content.Intent;
 import android.graphics.Color;
 import android.os.Bundle;
 import android.support.v4.app.FragmentManager;
+import android.support.v4.content.ContextCompat;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
 import android.view.Menu;
@@ -12,13 +13,12 @@ import android.view.View;
 import android.widget.Toast;
 
 import com.mikepenz.aboutlibraries.LibsBuilder;
-import com.mikepenz.aboutlibraries.ui.LibsFragment;
+import com.mikepenz.aboutlibraries.ui.LibsSupportFragment;
 import com.mikepenz.actionitembadge.R;
 import com.mikepenz.actionitembadge.library.ActionItemBadge;
 import com.mikepenz.actionitembadge.library.ActionItemBadgeAdder;
 import com.mikepenz.actionitembadge.library.utils.BadgeStyle;
 import com.mikepenz.actionitembadge.library.utils.NumberUtils;
-import com.mikepenz.actionitembadge.library.utils.UIUtil;
 import com.mikepenz.fontawesome_typeface_library.FontAwesome;
 import com.mikepenz.materialdrawer.Drawer;
 import com.mikepenz.materialdrawer.DrawerBuilder;
@@ -92,8 +92,8 @@ public class ToolbarActivity extends AppCompatActivity {
                             style = ActionItemBadge.BadgeStyles.YELLOW.getStyle();
                             bigStyle = ActionItemBadge.BadgeStyles.YELLOW_LARGE.getStyle();
                         } else if (iDrawerItem.getIdentifier() == 8) {
-                            style = new BadgeStyle(BadgeStyle.Style.DEFAULT, R.layout.menu_badge, Color.parseColor("#FE0665"), Color.parseColor("#CC0548"), Color.parseColor("#EEEEEE"));
-                            bigStyle = new BadgeStyle(BadgeStyle.Style.LARGE, R.layout.menu_badge_large, Color.parseColor("#FE0665"), Color.parseColor("#CC0548"), Color.parseColor("#EEEEEE"));
+                            style = new BadgeStyle(BadgeStyle.Style.DEFAULT, R.layout.menu_action_item_badge, Color.parseColor("#FE0665"), Color.parseColor("#CC0548"), Color.parseColor("#EEEEEE"));
+                            bigStyle = new BadgeStyle(BadgeStyle.Style.LARGE, R.layout.menu_action_item_badge_large, Color.parseColor("#FE0665"), Color.parseColor("#CC0548"), Color.parseColor("#EEEEEE"));
                         } else if (iDrawerItem.getIdentifier() == 9) {
                             BadgeStyle temp = style;
                             style = bigStyle;
@@ -111,12 +111,12 @@ public class ToolbarActivity extends AppCompatActivity {
                     }
                 })
                 .withFireOnInitialOnClick(true)
-                .withSelectedItem(2)
+                .withSelectedItem(3)
                 .withSavedInstance(savedInstanceState)
                 .build();
 
         //init and show about libraries :D
-        LibsFragment fragment = new LibsBuilder().withFields(R.string.class.getFields()).withVersionShown(true).withLicenseShown(true).fragment();
+        LibsSupportFragment fragment = new LibsBuilder().withFields(R.string.class.getFields()).withVersionShown(true).withLicenseShown(true).supportFragment();
         FragmentManager fragmentManager = getSupportFragmentManager();
         fragmentManager.beginTransaction().replace(R.id.frame_container, fragment).commit();
     }
@@ -143,7 +143,7 @@ public class ToolbarActivity extends AppCompatActivity {
         if (badgeDrawableCount == 0) {
             ActionItemBadge.hide(menu.findItem(R.id.item_sampleBadge_drawable));
         } else {
-            ActionItemBadge.update(this, menu.findItem(R.id.item_sampleBadge_drawable), UIUtil.getCompatDrawable(this, R.drawable.ic_notification), style, NumberUtils.formatNumber(badgeDrawableCount));
+            ActionItemBadge.update(this, menu.findItem(R.id.item_sampleBadge_drawable), ContextCompat.getDrawable(this, R.drawable.ic_notification), style, NumberUtils.formatNumber(badgeDrawableCount));
         }
 
         new ActionItemBadgeAdder().act(this).menu(menu).title(R.string.sample_2).itemDetails(0, SAMPLE2_ID, 1).showAsAction(MenuItem.SHOW_AS_ACTION_ALWAYS).add(bigStyle, 1);

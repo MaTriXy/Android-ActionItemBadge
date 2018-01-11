@@ -1,15 +1,14 @@
 apply plugin: 'com.android.application'
 
 android {
-    compileSdkVersion 22
-    buildToolsVersion '22.0.1'
+    compileSdkVersion rootProject.ext.compileSdkVersion
+    buildToolsVersion rootProject.ext.buildToolsVersion
 
     defaultConfig {
-        applicationId "com.mikepenz.actionitembadge.sample"
         minSdkVersion 14
-        targetSdkVersion 22
-        versionCode 310
-        versionName "3.1.0"
+        targetSdkVersion 27
+        versionCode 332
+        versionName "3.3.2"
     }
     buildTypes {
         release {
@@ -17,19 +16,48 @@ android {
             proguardFiles getDefaultProguardFile('proguard-android.txt'), 'proguard-rules.pro'
         }
     }
-    enforceUniquePackageName false
+
+    lintOptions {
+        abortOnError false
+    }
 }
 
 dependencies {
     compile project(':library')
-    compile('com.mikepenz:materialdrawer:4.0.0.rc7-SNAPSHOT@aar') {
-        transitive = true
-        exclude module: "iconics-core"
-    }
-    compile('com.mikepenz:aboutlibraries:5.1.1@aar') {
-        transitive = true
+
+    compile "com.android.support:appcompat-v7:${rootProject.ext.supportLibVersion}"
+    compile "com.android.support:cardview-v7:${rootProject.ext.supportLibVersion}"
+    compile "com.android.support:recyclerview-v7:${rootProject.ext.supportLibVersion}"
+
+    // used to base on some backwards compatible themes
+    // contains util classes to support various android versions, and clean up code
+    // comes with the awesome "Holder"-Pattern
+    // https://github.com/mikepenz/Materialize
+    compile 'com.mikepenz:materialize:1.1.1@aar'
+
+    // used to fill the RecyclerView with the DrawerItems
+    // and provides single and multi selection, expandable items
+    // https://github.com/mikepenz/FastAdapter
+    compile 'com.mikepenz:fastadapter:2.6.3@aar'
+
+    // used to provide out of the box icon font support. simplifies development,
+    // and provides scalable icons. the core is very very light
+    // https://github.com/mikepenz/Android-Iconics
+    compile 'com.mikepenz:iconics-core:2.9.3@aar'
+
+    //used to generate the drawer on the left
+    //https://github.com/mikepenz/MaterialDrawer
+    compile('com.mikepenz:materialdrawer:5.9.5@aar') {
+        exclude group: "com.android.support"
     }
 
-    compile 'com.mikepenz:google-material-typeface:1.2.0@aar'
-    compile 'com.mikepenz:fontawesome-typeface:4.4.0@aar'
+    //used to generate the Open Source section
+    //https://github.com/mikepenz/AboutLibraries
+    compile 'com.mikepenz:aboutlibraries:5.9.8@aar'
+
+    //used to display the icons in the drawer and in the menu
+    //https://github.com/mikepenz/Android-Iconics
+    compile 'com.mikepenz:google-material-typeface:3.0.1.1.original@aar'
+    compile 'com.mikepenz:fontawesome-typeface:4.7.0.0@aar'
+    compile 'com.mikepenz:crossfader:1.5.0@aar'
 }
